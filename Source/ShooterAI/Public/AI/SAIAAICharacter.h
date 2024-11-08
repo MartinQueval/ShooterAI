@@ -19,7 +19,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true), Category=AI)
+	AActor* TargetActor;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true), Category=AI)
+	FString Equipe;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
