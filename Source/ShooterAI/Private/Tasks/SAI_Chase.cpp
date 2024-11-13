@@ -8,6 +8,7 @@
 USAI_Chase::USAI_Chase()
 {
 	NodeName = "Chase Target Location";
+	bNotifyTick	= true;
 }
 
 EBTNodeResult::Type USAI_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -37,5 +38,30 @@ EBTNodeResult::Type USAI_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, u
 	AIController->MoveToLocation(TargetLocation);
 	
 	
-	return EBTNodeResult::Succeeded;
+	return EBTNodeResult::InProgress;
+}
+
+void USAI_Chase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+	AAIController* AIController = OwnerComp.GetAIOwner();
+	ASAIAAICharacter* AICharacter = Cast<ASAIAAICharacter>(AIController->GetPawn());
+	if (AIController == nullptr || AICharacter == nullptr )
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+	}
+
+	
+	// Récupérez la TargetLocation de l'IA
+	FVector TargetLocation = AICharacter->TargetActor->GetActorLocation();
+	
+	// Déplacez l'IA vers TargetLocation
+	AIController->MoveToLocation(TargetLocation);
+	
+	if(OwnerComp.GetAIOwner()->GetPawn()->GetDistanceTo(AICharacter->TargetActor) < 50)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+	
 }
