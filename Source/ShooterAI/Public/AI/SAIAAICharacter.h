@@ -25,6 +25,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true), Category=AI)
 	FString Equipe;
+
+	// récupérer equipe
+	UFUNCTION(BlueprintCallable, Category = "Equipe")
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
